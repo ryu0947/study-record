@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { StudyRecords } from "./components/studyRecords";
+import { StudyRecords } from "./components/StudyRecords";
 import { AddButton } from "./components/AddButton";
 import { DisplayRecords } from "./components/displayRecords";
 import { InputContents } from "./components/InputContents";
