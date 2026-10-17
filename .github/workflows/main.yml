@@ -36,8 +36,8 @@ jobs:
         run: npm install
       - name: Supabase account key & build
         env:
-        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-        SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
         run: npm run build
       - name: Install firebase-tools
         run: npm install --save-dev firebase-tools
