@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { StudyRecords } from "./components/StudyRecords";
 import { AddButton } from "./components/AddButton";
-import { DisplayRecords } from "./components/displayRecords";
+import { DisplayRecords } from "./components/DisplayRecords";
 import { InputContents } from "./components/InputContents";
 import { InputTime } from "./components/InputTime";
 import { supabase } from "./lib/supabaseClient";
