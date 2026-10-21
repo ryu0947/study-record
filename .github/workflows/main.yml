@@ -22,11 +22,6 @@ jobs:
         run: npm install
       - name: Run build
         run: npm run build
-      - name: Upload build-artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: build-artifacts
-          path: dist
 
   deploy:
     name: deploy
@@ -40,11 +35,6 @@ jobs:
         with:
           node-version-file: "package.json"
           cache: "npm"
-      - name: Download build artifacts
-        uses: actions/download-artifact@v7
-        with:
-          name: build-artifacts
-          path: dist
       - name: Install firebase-tools
         run: npm install --save-dev firebase-tools
       - name: Decode Firebase service account key
