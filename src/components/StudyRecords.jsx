@@ -15,10 +15,8 @@ export const StudyRecords = ({
       <ul>
         {records.map((record) => (
           <li key={record.id}>
-            <p>
               {record.contents}：{record.time}時間
               <DeleteButton id={record.id} onDelete={onDelete} />
-            </p>
           </li>
         ))}
       </ul>
