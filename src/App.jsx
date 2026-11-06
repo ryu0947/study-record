@@ -4,73 +4,71 @@ import { AddButton } from "./components/AddButton";
 import { DisplayRecords } from "./components/DisplayRecords";
 import { InputContents } from "./components/InputContents";
 import { InputTime } from "./components/InputTime";
-import { supabase } from "./lib/supabaseClient";
+import { getRecords, addRecords, deleteRecords } from "../service/studyRecords";
 
 export const App = () => {
-  const [data, setData] = useState([]);
+  const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [contents, setContents] = useState("");
   const [time, setTime] = useState(0);
-  const [records, setRecords] = useState([]);
-  const [hasError, setHasError] = useState("");
+  const [fetchErrorMessage, setFetchErrorMessage] = useState("");
+  const [hasInputError, setHasInputError] = useState(false);
 
   const handleContentsChange = (e) => {
-    const value = e.target.value;
-    setContents(value);
+    setContents(e.target.value);
   };
 
   const handleTimeChange = (e) => {
-    const value = Number(e.target.value);
-    setTime(value);
+    setTime(Number(e.target.value));
   };
 
-  const handleAddRecord = (contents, time) => {
-    if (contents === "" || time === 0 || time === "") {
-      setHasError(true);
-    } else {
-      setHasError(false);
-      setRecords([...records, { contents: contents, time: time }]);
-      addTodos(contents, time);
+  const handleAddRecord = async (contents, time) => {
+    if (contents === "" || time === 0) {
+      setHasInputError(true);
+      return;
+    }
+
+    setHasInputError(false);
+
+    try {
+      const data = await addRecords(contents, time);
+      setRecords(data);
       setContents("");
       setTime(0);
+    } catch (error) {
+      console.error(error);
+      setFetchErrorMessage("データを登録出来ませんでした。ページを更新して再度お試しください。");
     }
   };
 
-  const totalTime = data.reduce((total, record) => {
+  const totalTime = records.reduce((total, record) => {
     return total + record.time;
   }, 0);
 
-  const getTodos = async () => {
-    const { data, error } = await supabase.from("study-record").select();
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    setLoading(false);
-    setData(data);
-  };
-
   useEffect(() => {
-    getTodos();
+    const fetchTodos = async () => {
+      try {
+        const data = await getRecords();
+        setRecords(data);
+      } catch (error) {
+        console.error(error);
+        setFetchErrorMessage("データを取得出来ませんでした。ページを更新して再度お試しください。");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTodos();
   }, []);
 
-  const addTodos = async (contents, time) => {
-    const { error } = await supabase
-      .from("study-record")
-      .insert({ time, contents });
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    await getTodos();
-  };
-
   const handleDeleteTodo = async (id) => {
-    await supabase.from("study-record").delete().match({id});
-    await getTodos();
+    try {
+      const data = await deleteRecords(id);
+      setRecords(data);
+    } catch (error) {
+      console.error(error);
+      setFetchErrorMessage("データを削除出来ませんでした。ページを更新して再度お試しください。");
+    }
   };
 
   return (
@@ -82,13 +80,14 @@ export const App = () => {
       <AddButton
         contents={contents}
         time={time}
-        hasError={hasError}
+        hasInputError={hasInputError}
         onAdd={handleAddRecord}
       />
       <StudyRecords
         loading={loading}
-        hasError={hasError}
-        records={data}
+        fetchErrorMessage={fetchErrorMessage}
+        hasInputError={hasInputError}
+        records={records}
         totalTime={totalTime}
         onDelete={handleDeleteTodo}
       />
