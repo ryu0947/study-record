@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - develop
 
 jobs:
   build:
@@ -21,6 +22,8 @@ jobs:
           node-version-file: "package.json"
       - name: Install dependencies
         run: npm install
+      - name: Run test
+        rnu: npm run test
       - name: Run build
         run: npm run build
       - name: Upload build-artifacts
