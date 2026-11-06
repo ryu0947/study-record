@@ -3,7 +3,8 @@ import { DeleteButton } from "./DeleteButton";
 
 export const StudyRecords = ({
   loading,
-  hasError,
+  fetchErrorMessage,
+  hasInputError,
   records,
   totalTime,
   onDelete,
@@ -11,7 +12,8 @@ export const StudyRecords = ({
   return (
     <>
       {loading && <Loading />}
-      {hasError && <p style={{ color: "red" }}>未入力の項目があります</p>}
+      {<p>{fetchErrorMessage}</p>}
+      {hasInputError && <p style={{ color: "red" }}>未入力の項目があります</p>}
       <ul>
         {records.map((record) => (
           <li key={record.id}>
