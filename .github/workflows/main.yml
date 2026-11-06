@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run test
-        rnu: npm run test
+        run: npm run test
       - name: Run build
         run: npm run build
       - name: Upload build-artifacts
