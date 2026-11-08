@@ -2,7 +2,6 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { getRecords, addRecords, deleteRecords } from "../service/studyRecords";
 import { App } from "./App";
-import { describe } from "vitest";
 
 vi.mock("../service/studyRecords", () => ({
   getRecords: vi.fn(),
